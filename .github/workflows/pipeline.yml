@@ -1,99 +1,12 @@
-name: DevSecOps Pipeline
+name: Test
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
-  security-and-deploy:
+  hello:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build
-        run: |
-          echo "Verificando arquivos..."
-          ls src/ || echo "Diretório src/ não encontrado!"
-          echo "Build OK!"
-
-      - name: Gitleaks Scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install Semgrep
-        run: pip3 install semgrep
-
-      - name: Run Semgrep
-        run: |
-          semgrep scan \
-            --config=auto \
-            --severity=ERROR \
-            --error \
-            src/
-
-      - name: Install Grype
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ./bin
-
-      - name: Run Grype
-        run: |
-          ./bin/grype dir:. --fail-on medium
-
-      - name: Generate GitHub Pages Report
-        run: |
-          mkdir -p docs
-
-          cat > docs/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <title>DevSecOps Dashboard</title>
-            <style>
-              body {
-                background: #0d1117;
-                color: white;
-                font-family: Arial, sans-serif;
-                padding: 40px;
-              }
-
-              h1 {
-                color: #58a6ff;
-              }
-
-              .item {
-                font-size: 24px;
-                margin: 15px 0;
-              }
-            </style>
-          </head>
-          <body>
-            <h1>Resultado da Pipeline</h1>
-
-            <div class="item">✅ Pipeline executada</div>
-            <div class="item">✅ Gitleaks executado</div>
-            <div class="item">✅ Semgrep executado</div>
-            <div class="item">✅ Grype executado</div>
-            <div class="item">✅ Deploy realizado</div>
-
-          </body>
-          </html>
-          EOF
-
-      - name: Deploy to GitHub Pages
-        run: |
-          touch docs/.nojekyll
-
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-          git add docs/
-          git commit -m "Update GitHub Pages report" || echo "Nenhuma alteração para commitar"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Teste
+        run: echo "GitHub Actions funcionando!"
