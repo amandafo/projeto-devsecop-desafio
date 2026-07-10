@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   security-and-deploy:
@@ -43,15 +44,56 @@ jobs:
         run: |
           ./bin/grype dir:. --fail-on medium
 
-      - name: Deploy to GitHub Pages
+      - name: Generate GitHub Pages Report
         run: |
           mkdir -p docs
-          cp -r src/* docs/ || true
-          touch docs/.nojekyll  # Evita processamento Jekyll
+
+          cat > docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>DevSecOps Dashboard</title>
+            <style>
+              body {
+                background: #0d1117;
+                color: white;
+                font-family: Arial, sans-serif;
+                padding: 40px;
+              }
+
+              h1 {
+                color: #58a6ff;
+              }
+
+              .item {
+                font-size: 24px;
+                margin: 15px 0;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Resultado da Pipeline</h1>
+
+            <div class="item">✅ Pipeline executada</div>
+            <div class="item">✅ Gitleaks executado</div>
+            <div class="item">✅ Semgrep executado</div>
+            <div class="item">✅ Grype executado</div>
+            <div class="item">✅ Deploy realizado</div>
+
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        run: |
+          touch docs/.nojekyll
+
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+
           git add docs/
-          git commit -m "Deploy to GitHub Pages" || echo "Nenhuma alteração para commitar"
+          git commit -m "Update GitHub Pages report" || echo "Nenhuma alteração para commitar"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
