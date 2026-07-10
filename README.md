@@ -22,8 +22,39 @@ A pipeline está **incompleta**. Os steps de segurança precisam ser implementad
 - [ ] Deploy com **GitHub Pages**
 
 ## Como a pipeline funciona
-> **Substitua este bloco pela sua explicação após implementar a pipeline.**
-> Descreva cada step, o que ele faz e por que ele é importante para a segurança.
 
+A pipeline é executada automaticamente a cada push na branch `main` e tem como objetivo validar a segurança da aplicação antes do deploy.
+
+### 1. Checkout do código
+Utiliza o GitHub Actions para baixar o conteúdo do repositório e disponibilizá-lo para as próximas etapas.
+
+### 2. Build
+Realiza uma validação básica da estrutura do projeto, verificando a existência dos arquivos necessários para a aplicação.
+
+### 3. Secrets Scanning — Gitleaks
+Executa o Gitleaks para identificar possíveis segredos expostos no código, como tokens, senhas, chaves de API e credenciais que possam ter sido commitadas acidentalmente.
+
+**Objetivo:** evitar vazamento de informações sensíveis.
+
+### 4. SAST — Semgrep
+Executa uma análise estática de segurança do código-fonte (SAST), procurando padrões inseguros e vulnerabilidades conhecidas.
+
+**Objetivo:** identificar falhas de segurança antes da aplicação entrar em produção.
+
+### 5. SCA — Grype
+Analisa as dependências do projeto para detectar bibliotecas com vulnerabilidades conhecidas (CVEs).
+
+**Objetivo:** garantir que componentes de terceiros utilizados pela aplicação estejam seguros.
+
+### 6. Deploy
+Após todas as validações serem aprovadas, o conteúdo da aplicação é publicado no GitHub Pages.
+
+**Objetivo:** disponibilizar a aplicação apenas quando todas as verificações de segurança forem concluídas com sucesso.
+
+### Fluxo da pipeline
+
+Build → Gitleaks → Semgrep → Grype → Deploy
+
+Caso qualquer etapa encontre um problema crítico, a execução é interrompida e o deploy não é realizado.
 ## URL de Produção
-> Adicione aqui o link do GitHub Pages após o deploy.
+https://amandafo.github.io/projeto-devsecop-desafio/
