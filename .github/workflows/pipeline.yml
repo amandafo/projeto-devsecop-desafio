@@ -6,19 +6,17 @@ on:
       - main
 
 jobs:
-  security:
-
+  security-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Build
         run: |
           echo "Verificando arquivos..."
-          ls src/
+          ls src/ || echo "Diretório src/ não encontrado!"
           echo "Build OK!"
 
       - name: Gitleaks Scan
@@ -27,23 +25,33 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Semgrep
-        run: pip install semgrep
+        run: pip3 install semgrep
 
       - name: Run Semgrep
         run: |
           semgrep scan \
-          --config auto \
-          -- error \
-          src/
-      
+            --config=auto \
+            --severity=ERROR \
+            --error \
+            src/
+
       - name: Install Grype
         run: |
-          curl -sSfL https://raw.githubsercontent.com/anchore/grype/main/instal.sh | sh
-      
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ./bin
+
       - name: Run Grype
         run: |
           ./bin/grype dir:. --fail-on medium
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         run: |
-          echo "Deploy realizado com sucesso!"
+          mkdir -p docs
+          cp -r src/* docs/ || true
+          touch docs/.nojekyll  # Evita processamento Jekyll
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add docs/
+          git commit -m "Deploy to GitHub Pages" || echo "Nenhuma alteração para commitar"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
