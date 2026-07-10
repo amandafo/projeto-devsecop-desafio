@@ -49,6 +49,7 @@ Analisa as dependências do projeto para detectar bibliotecas com vulnerabilidad
 ### 6. Deploy
 Após todas as validações serem aprovadas, o conteúdo da aplicação é publicado no GitHub Pages.
 
+
 **Objetivo:** disponibilizar a aplicação apenas quando todas as verificações de segurança forem concluídas com sucesso.
 
 ### Fluxo da pipeline
