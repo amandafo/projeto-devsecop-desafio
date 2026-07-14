@@ -36,6 +36,18 @@ jobs:
             --error \
             src/
 
+            
+
+      - name: Install Syft
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ./bin
+
+      - name: Generate SBOM
+        run: |
+          ./bin/syft dir:. -o cyclonedx-json > sbom.json
+
+
+          
       - name: Install Grype
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ./bin
