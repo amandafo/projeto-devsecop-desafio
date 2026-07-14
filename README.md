@@ -52,7 +52,6 @@ Após todas as validações serem aprovadas, o conteúdo da aplicação é publi
 **Objetivo:** disponibilizar a aplicação apenas quando todas as verificações de segurança forem concluídas com sucesso.
 
 ### Fluxo da pipeline
-
 Build → Gitleaks → Semgrep → Grype → Deploy
 
 Caso qualquer etapa encontre um problema crítico, a execução é interrompida e o deploy não é realizado.
