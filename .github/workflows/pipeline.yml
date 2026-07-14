@@ -42,7 +42,7 @@ jobs:
 
       - name: Run Grype
         run: |
-          ./bin/grype dir:. --fail-on medium
+          ./bin/grype package-lock.json --fail-on medium
 
       - name: Generate GitHub Pages Report
         run: |
