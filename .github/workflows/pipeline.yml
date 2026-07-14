@@ -47,7 +47,7 @@ jobs:
           ./bin/syft dir:. -o cyclonedx-json > sbom.json
 
 
-          
+
       - name: Install Grype
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ./bin
@@ -57,46 +57,12 @@ jobs:
           ./bin/grype dir:. --fail-on medium
 
           
-      - name: Generate GitHub Pages Report
+
+      - name: Generate GitHub Pages Content
         run: |
           mkdir -p docs
-
-          cat > docs/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <title>DevSecOps Dashboard</title>
-            <style>
-              body {
-                background: #0d1117;
-                color: white;
-                font-family: Arial, sans-serif;
-                padding: 40px;
-              }
-
-              h1 {
-                color: #58a6ff;
-              }
-
-              .item {
-                font-size: 24px;
-                margin: 15px 0;
-              }
-            </style>
-          </head>
-          <body>
-            <h1>Resultado da Pipeline</h1>
-
-            <div class="item">✅ Pipeline executada</div>
-            <div class="item">✅ Gitleaks executado</div>
-            <div class="item">✅ Semgrep executado</div>
-            <div class="item">✅ Grype executado</div>
-            <div class="item">✅ Deploy realizado</div>
-
-          </body>
-          </html>
-          EOF
+          cp README.md docs/README
+      
 
       - name: Deploy to GitHub Pages
         run: |
