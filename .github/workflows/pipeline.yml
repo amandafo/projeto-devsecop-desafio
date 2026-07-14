@@ -98,4 +98,3 @@ jobs:
           git add docs/
           git commit -m "Update GitHub Pages report" || echo "Nenhuma alteração para commitar"
           git push origin main
-``
