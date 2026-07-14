@@ -1,5 +1,8 @@
 name: DevSecOps Pipeline
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -52,34 +55,34 @@ jobs:
           <!DOCTYPE html>
           <html>
           <head>
-            <meta charset="UTF-8">
-            <title>DevSecOps Dashboard</title>
-            <style>
-              body {
-                background: #0d1117;
-                color: white;
-                font-family: Arial, sans-serif;
-                padding: 40px;
-              }
+              <meta charset="UTF-8">
+              <title>DevSecOps Dashboard</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      padding: 40px;
+                      background: #0d1117;
+                      color: white;
+                  }
 
-              h1 {
-                color: #58a6ff;
-              }
+                  h1 {
+                      color: #58a6ff;
+                  }
 
-              .item {
-                font-size: 24px;
-                margin: 15px 0;
-              }
-            </style>
+                  .item {
+                      margin: 15px 0;
+                      font-size: 22px;
+                  }
+              </style>
           </head>
           <body>
-            <h1>Resultado da Pipeline</h1>
+              <h1>Resultado da Pipeline</h1>
 
-            <div class="item">✅ Pipeline executada</div>
-            <div class="item">✅ Gitleaks executado</div>
-            <div class="item">✅ Semgrep executado</div>
-            <div class="item">✅ Grype executado</div>
-            <div class="item">✅ Deploy realizado</div>
+              <div class="item">✅ Build executado</div>
+              <div class="item">✅ Gitleaks executado</div>
+              <div class="item">✅ Semgrep executado</div>
+              <div class="item">✅ Grype executado</div>
+              <div class="item">✅ Deploy realizado</div>
 
           </body>
           </html>
@@ -95,5 +98,4 @@ jobs:
           git add docs/
           git commit -m "Update GitHub Pages report" || echo "Nenhuma alteração para commitar"
           git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+``
