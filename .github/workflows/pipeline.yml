@@ -44,6 +44,7 @@ jobs:
         run: |
           ./bin/grype dir:. --fail-on medium
 
+          
       - name: Generate GitHub Pages Report
         run: |
           mkdir -p docs
